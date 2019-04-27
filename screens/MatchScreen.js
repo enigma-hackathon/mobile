@@ -4,6 +4,7 @@ import {
   Image,
   Text,
   StyleSheet,
+  TouchableHighlight,
 } from 'react-native';
 import {
   SafeAreaView,
@@ -40,7 +41,7 @@ export default class MatchScreen extends React.Component {
             }} />
           </MapView>
         <View style={styles.matchContainer}>
-            <Text style={{ fontWeight: '600', color: '#333', fontSize: 24}}>Meet your Miami Lokly</Text>
+            <Text style={{ fontWeight: '600', color: '#333', fontSize: 24}}>Yay, meet your Miami Lokly</Text>
             <View style={{ flexDirection: 'column', alignItems: 'center', marginBottom: 15, marginTop: 15 }}>
               <Image source={{ uri: this.props.navigation.getParam('picture')}} resizeMode="cover" style={styles.photo}/>
               <Text style={styles.name}>{this.props.navigation.getParam('name')}</Text>
@@ -59,6 +60,18 @@ export default class MatchScreen extends React.Component {
                 </View>
               </View>
             </View>
+            <View style={{ flexDirection: 'row'}}>
+          <TouchableHighlight style={styles.bottomBtnWrapper}>
+            <View style={styles.bottomBtn}>
+              <Text style={styles.bottomBtnText}>Call</Text>
+            </View>
+          </TouchableHighlight>
+          <TouchableHighlight style={styles.bottomBtnWrapper}>
+            <View style={styles.bottomBtn}>
+              <Text style={styles.bottomBtnText}>Cancel</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
         </View>
       </SafeAreaView>
     )
@@ -81,7 +94,7 @@ const styles = StyleSheet.create({
   },
   matchContainer: {
     flex: 1,
-    marginTop: -50,
+    marginTop: -100,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     paddingTop: 30,
@@ -127,13 +140,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 10,
+    marginTop: 5,
   },
   interest: {
-    width: '45%',
-    paddingVertical: 5,
-    borderRadius: 50,
-    height: 50,
+    width: '30%',
+    borderRadius: 20,
+    height: 40,
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#1292F3',
@@ -143,7 +155,24 @@ const styles = StyleSheet.create({
   interestText: {
     textAlign: 'center',
     color: 'white',
-    fontWeight: '600',
-    fontSize: 24,
+    fontWeight: '400',
+    fontSize: 20,
   },
+  bottomBtnWrapper: {
+    flex: 1,
+    width: '45%',
+    marginHorizontal: 5,
+  },
+  bottomBtn: {
+    backgroundColor: '#eee',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    borderColor: '#ccc',
+  },
+  bottomBtnText: {
+    color: '#333',
+    fontSize: 20,
+    fontWeight: '500',
+  }
 })

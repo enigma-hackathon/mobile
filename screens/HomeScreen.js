@@ -90,7 +90,7 @@ export default class HomeScreen extends React.Component {
           </View>
 
           <Text style={styles.welcomeText}>Hi there, {this.state.userFirstName}</Text>
-          <Text style={styles.titleText}>What are you in the mood for today?</Text>
+          <Text style={styles.titleText}>What about Miami would you like to see today?</Text>
 
           <View style={styles.interestsWrapper}>
             {this.state.interests.map((e, i) => (
