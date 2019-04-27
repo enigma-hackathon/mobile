@@ -21,7 +21,7 @@ import { matchingFound } from '../redux/modules/match';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    drawerLabel: 'Home',
+    drawerLabel: 'Go Lokl',
     headerLeft: (
       <Button title="Menu"
         onPress={() => navigation.toggleDrawer()}
@@ -90,7 +90,7 @@ export default class HomeScreen extends React.Component {
           </View>
 
           <Text style={styles.welcomeText}>Hi there, {this.state.userFirstName}</Text>
-          <Text style={styles.titleText}>What about Miami would you like to see today?</Text>
+          <Text style={styles.titleText}>What would you like to do in Miami today?</Text>
 
           <View style={styles.interestsWrapper}>
             {this.state.interests.map((e, i) => (
