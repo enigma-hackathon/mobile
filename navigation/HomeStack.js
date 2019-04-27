@@ -6,4 +6,10 @@ import HomeScreen from '../screens/HomeScreen';
 
 export default createStackNavigator({
   Home: HomeScreen,
+}, {
+  defaultNavigationOptions: {
+    headerStyle: {
+      borderBottomWidth: 0,
+    }
+  }
 })
