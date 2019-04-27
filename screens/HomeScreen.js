@@ -6,6 +6,7 @@ import {
   Image,
   TouchableHighlight,
   ActivityIndicator,
+  Button,
 } from 'react-native';
 import {
   SafeAreaView,
@@ -14,10 +15,18 @@ import moment from 'moment';
 import * as firebase from 'firebase';
 import { interests } from '../config/interests';
 import { HEROKU_API } from '../constants';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { matchingFound } from '../redux/modules/match';
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     drawerLabel: 'Home',
+    headerLeft: (
+      <Button title="Menu"
+        onPress={() => navigation.toggleDrawer()}
+      />
+    )
   })
 
   constructor(...args) {
@@ -43,56 +52,73 @@ export default class HomeScreen extends React.Component {
     const {
       uid,
     } = firebase.auth().currentUser;
+
     const data = new FormData();
     data.append('uid', uid);
-    data.append('interests', this.state.interests.filter((e) => e.s));
+    data.append('interests', this.state.interests.filter((e) => e.s).map((e) => e.i).join(','));
 
     fetch(HEROKU_API + '/match', {
       method: 'POST',
       body: data,
-    }).then((resp) => resp.json())
+    }).then((resp) => {
+      console.log(resp);
+      return resp.json();
+    })
       .then((data) => {
-        console.log(data);
+        this.setState({ matchLoading: false });
+        if (data.status === true) {
+          console.log(data.lokly[1])
+          this.props.navigation.navigate('Match', data.lokly[1]);
+        }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => {
+        console.error(err);
+        this.setState({ matchLoading: false });
+      });
   }
 
   render() {
     return (
       <SafeAreaView style={styles.main}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.titleText}>{moment().format('MMMM Do, YYYY')}</Text>
-          <View style={{ flexDirection: 'column'}}>
-            <Image source={require('../assets/weather.png')} resizeMode="contain" style={styles.weather}/>
-            <Text style={{ fontSize: 18, color: '#727272' }}>78℉</Text>
+        <View style={{ flex: 1}}>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.titleText}>{moment().format('MMMM Do, YYYY')}</Text>
+            <View style={{ flexDirection: 'column'}}>
+              <Image source={require('../assets/weather.png')} resizeMode="contain" style={styles.weather}/>
+              <Text style={{ fontSize: 18, color: '#727272' }}>78℉</Text>
+            </View>
+          </View>
+
+          <Text style={styles.welcomeText}>Hi there, {this.state.userFirstName}</Text>
+          <Text style={styles.titleText}>What are you in the mood for today?</Text>
+
+          <View style={styles.interestsWrapper}>
+            {this.state.interests.map((e, i) => (
+              <TouchableHighlight key={`interest_${i}`}
+                style={styles.interestBtnWrapper}
+                onPress={() => this._onInterestPress(i)}
+                underlayColor="transparent">
+                <View style={[styles.interestBtn, e.s ? { backgroundColor: '#1292F3' }: { backgroundColor: '#CEE4F6' }]}>
+                  <Text style={styles.interestBtnText}>{e.i}</Text>
+                </View>
+              </TouchableHighlight>
+            ))}
           </View>
         </View>
 
-        <Text style={styles.welcomeText}>Hi there, {this.state.userFirstName}</Text>
-        <Text style={styles.titleText}>What are you in the mood for today?</Text>
-
-        <View style={styles.interestsWrapper}>
-          {this.state.interests.map((e, i) => (
-            <TouchableHighlight key={`interest_${i}`}
-              style={styles.interestBtnWrapper}
-              onPress={() => this._onInterestPress(i)}
-              underlayColor="transparent">
-              <View style={[styles.interestBtn, e.s ? { backgroundColor: '#1292F3' }: { backgroundColor: '#CEE4F6' }]}>
-                <Text style={styles.interestBtnText}>{e.i}</Text>
-              </View>
-            </TouchableHighlight>
-          ))}
-        </View>
-
-        <TouchableHighlight underlayColor="transparent" onPress={this._onConfirmPress}>
-            <View>
-              {this.state.matchLoading ? <ActivityIndicator /> : <Text>Go Lokl</Text>}
-            </View>
+        <TouchableHighlight underlayColor="transparent"
+          onPress={this._onConfirmPress}>
+          <View style={styles.ctaBtn}>
+            {this.state.matchLoading ? <ActivityIndicator color="white" /> : <Text style={styles.ctaBtnText}>Go Lokl</Text>}
+          </View>
         </TouchableHighlight>
       </SafeAreaView>
     )
   }
 }
+
+/* const mapDispatchToProps = (dispatch) => bindActionCreators({ matchingFound }, dispatch);
+export default connect((state) => state, mapDispatchToProps)(HomeScreen); */
 
 const styles= StyleSheet.create({
   main: {
@@ -144,4 +170,17 @@ const styles= StyleSheet.create({
     color: '#727272',
     marginBottom: 5,
   },
+  ctaBtn: {
+    height: 50,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#CE13E0',
+    borderRadius: 50,
+  },
+  ctaBtnText: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: '800',
+  }
 })
