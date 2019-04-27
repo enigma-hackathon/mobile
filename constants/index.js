@@ -1,0 +1,1 @@
+export const HEROKU_API = 'https://enigma-hackathon-19.herokuapp.com/api';
