@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     paddingTop: 30,
     backgroundColor: 'white',
-    shadowColor: '#333',
+    shadowColor: '#777',
     shadowOffset: {
       height: 1,
       width: 1,
@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 10,
     borderColor: '#ccc',
+    borderRadius: 5,
   },
   bottomBtnText: {
     color: '#333',
